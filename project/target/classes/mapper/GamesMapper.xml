@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project412.mapper.GamesMapper">
+
+    <resultMap id="BaseResultMap" type="project412.model.Games">
+            <id property="gameName" column="game_name" jdbcType="VARCHAR"/>
+            <result property="gameInfo" column="game_info" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        game_name,game_info
+    </sql>
+    <insert id="addGame">
+        INSERT INTO GAME_HIS VALUES (#{email},#{gameName})
+    </insert>
+    <delete id="removeGame">
+        delete from game_his where email = #{email} and game_name = #{gameName}
+    </delete>
+    <select id="selectPlayedGameUsers" resultType="project412.model.Users">
+        SELECT
+            u.email, u.username
+        from games g
+             JOIN game_his gh ON g.game_name = gh.game_name
+            JOIN users u ON gh.email = u.email
+        WHERE g.game_name = #{gameName} ;
+    </select>
+
+    <select id="selectPlayedGames" resultType="project412.model.Games">
+        SELECT * FROM game_his where email = #{email};
+    </select>
+    <select id="selectGames" resultType="project412.model.Games">
+        select * from games
+    </select>
+
+
+</mapper>

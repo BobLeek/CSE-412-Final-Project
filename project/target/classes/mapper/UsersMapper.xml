@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project412.mapper.UsersMapper">
+
+    <resultMap id="BaseResultMap" type="project412.model.Users">
+            <id property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="comment" column="comment" jdbcType="VARCHAR"/>
+            <result property="steamLevel" column="steam_level" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        email,username,password,
+        comment,steam_level
+    </sql>
+    <insert id="addFriend">
+        insert into friends values (#{email}, #{friendEmail})
+    </insert>
+    <delete id="removeFriend">
+        delete from friends where email = #{email} and friend_email = #{friendEmail}
+    </delete>
+
+    <select id="selectUser" resultType="project412.model.Users">
+        select * from users where email = #{email} and password = #{password}
+    </select>
+
+    <select id="selectFriends" resultType="project412.model.Users">
+        SELECT friend_email as email, username
+        from friends f join users u on f.friend_email = u.email
+        where f.email = #{email}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT count(0)
+        from friends f
+        where f.email = #{email} and f.friend_email = #{friendEmail}
+    </select>
+
+
+</mapper>
